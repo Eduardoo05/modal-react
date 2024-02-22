@@ -3,6 +3,16 @@ import styles from './modal.module.scss'
 
 export default function Modal({children, title, root}){
     const ref = useRef(null)
+
+    function callback(){
+        root.unmount();
+        document.querySelector("#modal").remove();
+        ref.current.removeEventListener('animationed', callback);
+    }
+    function handleClick(){
+        ref.current.classList.add(styles.fadeOut);
+        ref.current.addEventListener('animationend', callback,{once: true})
+    }
     
   return (
     <>
@@ -11,7 +21,7 @@ export default function Modal({children, title, root}){
         <div className={styles.modalHeader}>
             <div>Titulo</div>
             <div>
-                <button className={styles.closeButton}>X</button>
+                <button onClick={handleClick} className={styles.closeButton}>X</button>
             </div>
         </div>
         <div className={styles.modalContent}>
